@@ -14,7 +14,7 @@ Installation
 Clone the repository:
 bash
 Copy code
-git clone https://github.com/yourusername/health-monitoring-system.git
+git clone [https://github.com/yourusername/health-monitoring-system.git](https://github.com/sometimesonia/Fitness-data-analytics/tree/main)
 Navigate to the project directory:
 bash
 Copy code
