@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obesity Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        html, body, header, #intro {
+            height: 100%;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        #predictionResult {
+            margin-top: 20px;
+        }
+        .alert {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand" href="index.html">Health App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="heart.html">Heart Disease</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="kidney.html">Kidney Disease</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="diabetes.html">Diabetes</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="liver.html">Liver Disease</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="cancer.html">Cancer</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="obesity.html">Obesity<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mask -->
+        <div id="intro" class="container-fluid view">
+            <h1 class="text-center text-capitalize pt-5">Know your chances of being obese in one Click!</h1>
+            <hr class="w-75 mx-auto pt-5">
+            <div class="row mb-5">
+                <div class="col-lg-6 col-md-6 col-12 my-auto">
+                    <img src="../static/img/obesity.jpg" class="float-left">
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <form id="predictionForm" action="{{ url_for('predict_obesity') }}" method="post">
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select class="form-control" id="gender" name="gender" required="required">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input class="form-control" type="number" id="age" name="age" required="required" placeholder="Age">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="height">Height (in cm)</label>
+                            <input class="form-control" type="number" step="any" id="height" name="height" required="required" placeholder="Height">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weight">Weight (in kg)</label>
+                            <input class="form-control" type="number" step="any" id="weight" name="weight" required="required" placeholder="Weight">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="calories">Daily Caloric Intake</label>
+                            <input class="form-control" type="number" step="any" id="calories" name="calories" required="required" placeholder="Daily Caloric Intake">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="activity">Physical Activity Level</label>
+                            <select class="form-control" id="activity" name="activity" required="required">
+                                <option value="sedentary">Sedentary</option>
+                                <option value="lightly_active">Lightly Active</option>
+                                <option value="moderately_active">Moderately Active</option>
+                                <option value="very_active">Very Active</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger" id="predictButton">Predict</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Prediction Result Display -->
+            <div id="predictionResult" class="text-center">
+                <!-- Result will be displayed here -->
+            </div>
+            <!-- /.Prediction Result Display -->
+        </div>
+        <!-- /.Mask -->
+    </header>
+
+    <!-- Bootstrap core JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        // Function to show a notification popup
+        function showNotification(prediction) {
+            var message = prediction; // Use the prediction result directly
+            var alertClass = "alert-success"; // Set the alert class for success
+            var html = '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+                            message +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                        '</div>';
+            $('#predictionResult').html(html);
+        }
+
+        // Handle form submission
+        $(document).ready(function () {
+            $('#predictionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                // Simulate an AJAX request to predict obesity
+                // In a real implementation, you would make an actual AJAX request to the server
+                setTimeout(function () {
+                    // Simulate a successful response from the server
+                    var response = { prediction: "Obesity_Type_I" };
+                    showNotification(response.prediction); // Display the prediction result
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
